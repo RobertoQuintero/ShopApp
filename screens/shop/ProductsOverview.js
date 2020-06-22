@@ -19,6 +19,7 @@ import * as productsActions from "../../store/actions/productsAction";
 
 const ProductsOverview = (props) => {
   const [isLoading, setisLoading] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
   const [error, setError] = useState(null);
   const products = useSelector((state) => state.products.availableProducts);
   //state: estado global-- products: el reducer-- availableProducts: la propiedad dentro del reducer
@@ -26,13 +27,13 @@ const ProductsOverview = (props) => {
 
   const loadProducts = useCallback(async () => {
     setError(null);
-    setisLoading(true);
+    setIsRefreshing(true);
     try {
       await dispatch(productsActions.fetchProducts());
     } catch (error) {
       setError(error.message);
     }
-    setisLoading(false);
+    setIsRefreshing(false);
   }, [dispatch, setisLoading, setError]);
 
   useEffect(() => {
@@ -46,7 +47,10 @@ const ProductsOverview = (props) => {
   }, [loadProducts]);
 
   useEffect(() => {
-    loadProducts();
+    setisLoading(true);
+    loadProducts().then(() => {
+      setisLoading(false);
+    });
   }, [dispatch, loadProducts]);
 
   const selectItemHandler = (id, title) => {
@@ -85,6 +89,8 @@ const ProductsOverview = (props) => {
 
   return (
     <FlatList
+      onRefresh={loadProducts}
+      refreshing={isRefreshing}
       data={products}
       keyExtractor={(item) => item.id}
       renderItem={(itemData) => (
