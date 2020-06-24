@@ -28,6 +28,13 @@ const UserProducts = (props) => {
       },
     ]);
   };
+  if (userProducts.length === 0) {
+    return (
+      <View style={styles.centered}>
+        <Text>No products found, maybe start creating some!</Text>
+      </View>
+    );
+  }
 
   return (
     <FlatList
@@ -87,4 +94,10 @@ UserProducts.navigationOptions = (navData) => {
     ),
   };
 };
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  centered: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+});

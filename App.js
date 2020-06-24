@@ -9,11 +9,14 @@ import { composeWithDevTools } from "redux-devtools-extension";
 import cartReducer from "./store/reducers/cartReducer";
 import ordersReducer from "./store/reducers/ordersReducer";
 import ReduxThunk from "redux-thunk";
+import authReducer from "./store/reducers/authReducer";
+import NavigationContainer from "./navigation/NavigationContainer";
 
 const rootReducer = combineReducers({
   products: productsReducer,
   cart: cartReducer,
   orders: ordersReducer,
+  auth: authReducer,
 });
 
 const store = createStore(rootReducer, applyMiddleware(ReduxThunk));
@@ -37,7 +40,7 @@ export default function App() {
   }
   return (
     <Provider store={store}>
-      <ShopNavigator />
+      <NavigationContainer />
     </Provider>
   );
 }
